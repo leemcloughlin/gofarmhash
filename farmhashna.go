@@ -131,6 +131,7 @@ func naHash64(s []byte, len uint64) uint64 {
 	var end uint64 = ((len - 1) / 64) * 64
 	var last64 uint64 = end + ((len - 1) & 63) - 63
 	var i uint64
+	origS := s[:]
 	for {
 		x = rotate64(x+y+v.first+fetch64(s[8:]), 37) * k1
 		y = rotate64(y+v.second+fetch64(s[48:]), 42) * k1
@@ -148,7 +149,7 @@ func naHash64(s []byte, len uint64) uint64 {
 	}
 	mul := k1 + ((z & 0xff) << 1)
 	// Make s point to the last 64 bytes of input.
-	s = s[last64:]
+	s = origS[last64:]
 	w.first += ((len - 1) & 63)
 	v.first += w.first
 	w.first += v.first

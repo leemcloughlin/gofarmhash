@@ -9,6 +9,11 @@ type StrToHash32 struct {
 	expected uint32
 }
 
+type StrToHash64 struct {
+	str      string
+	expected uint64
+}
+
 type NumInOut struct {
 	in  uint32
 	out uint32
@@ -370,6 +375,7 @@ func Test004(t *testing.T) {
 	t.Log("Hash32")
 	strToHash32 := []StrToHash32{
 		// Hash32
+		// Hash32
 		{"", 0xdc56d17a},
 		{"a", 0x3c973d4d},
 		{"hi", 0xf2311502},
@@ -377,9 +383,33 @@ func Test004(t *testing.T) {
 		{"lee@lmmrtech.com", 0xaf0a30fe},
 		{"docklandsman@gmail.com", 0x5d8cdbf4},
 		{"fred@example.com", 0x7acdc357},
+		{"Go is a tool for managing Go source code.Usage:	go command [arguments]The commands are:    build       compile packages and dependencies    clean       remove object files    env         print Go environment information    fix         run go tool fix on packages    fmt         run gofmt on package sources    generate    generate Go files by processing source    get         download and install packages and dependencies    install     compile and install packages and dependencies    list        list packages    run         compile and run Go program    test        test packages    tool        run specified go tool    version     print Go version    vet         run go tool vet on packagesUse go help [command] for more information about a command.Additional help topics:    c           calling between Go and C    filetype    file types    gopath      GOPATH environment variable    importpath  import path syntax    packages    description of package lists    testflag    description of testing flags    testfunc    description of testing functionsUse go help [topic] for more information about that topic.", 0x9c8f96f3},
 	}
 	for _, s := range strToHash32 {
 		hash := Hash32([]byte(s.str), uint64(len(s.str)))
+		if hash != s.expected {
+			t.Errorf("failed expected %x got %x", s.expected, hash)
+		} else {
+			t.Logf("OK expected %x got %x", s.expected, hash)
+		}
+	}
+}
+
+func Test005(t *testing.T) {
+	t.Log("Hash64")
+	strToHash64 := []StrToHash64{
+		// Hash64
+		{"", 0x9ae16a3b2f90404f},
+		{"a", 0xb3454265b6df75e3},
+		{"hi", 0x6a5d2fba44f012f8},
+		{"hello world", 0x588fb7478bd6b01b},
+		{"lee@lmmrtech.com", 0x61bec68db00fa2ff},
+		{"docklandsman@gmail.com", 0xb678cf3842309f40},
+		{"fred@example.com", 0x7fbbcd6191d8dce0},
+		{"Go is a tool for managing Go source code.Usage:	go command [arguments]The commands are:    build       compile packages and dependencies    clean       remove object files    env         print Go environment information    fix         run go tool fix on packages    fmt         run gofmt on package sources    generate    generate Go files by processing source    get         download and install packages and dependencies    install     compile and install packages and dependencies    list        list packages    run         compile and run Go program    test        test packages    tool        run specified go tool    version     print Go version    vet         run go tool vet on packagesUse go help [command] for more information about a command.Additional help topics:    c           calling between Go and C    filetype    file types    gopath      GOPATH environment variable    importpath  import path syntax    packages    description of package lists    testflag    description of testing flags    testfunc    description of testing functionsUse go help [topic] for more information about that topic.", 0xafe256550e4567c9},
+	}
+	for _, s := range strToHash64 {
+		hash := Hash64([]byte(s.str), uint64(len(s.str)))
 		if hash != s.expected {
 			t.Errorf("failed expected %x got %x", s.expected, hash)
 		} else {
