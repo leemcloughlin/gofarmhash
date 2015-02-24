@@ -1,5 +1,7 @@
 package farmhash
 
+// Based on the original C++ farmhashmk.cc
+
 // Note: These functions clashed with the versions in farmhashcc
 // Some only differ by taking a seed but others are quite different
 // To avoid clashes I've added mk to the start of these names

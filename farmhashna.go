@@ -1,5 +1,7 @@
 package farmhash
 
+// Based on the original C++ farmhashna.cc
+
 func shiftMix(val uint64) uint64 {
 	return val ^ (val >> 47)
 }

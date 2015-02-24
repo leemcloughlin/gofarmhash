@@ -1,6 +1,6 @@
 package farmhash
 
-// platform.go based on the original C++ platform.cc
+// Based on the original C++ platform.cc
 
 import (
 	"encoding/binary"

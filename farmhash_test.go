@@ -1,5 +1,8 @@
 package farmhash
 
+// go test
+// Test both the Public and internal func's
+
 import (
 	"fmt"
 	"testing"

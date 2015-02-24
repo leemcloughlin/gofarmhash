@@ -1,5 +1,7 @@
 package farmhash
 
+// Based on the original C++ farmhashcc.cc
+
 // This file provides a 32-bit hash equivalent to CityHash32 (v1.1.1)
 // and a 128-bit hash equivalent to CityHash128 (v1.1.1).  It also provides
 // a seeded 32-bit hash function similar to CityHash32.
