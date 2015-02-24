@@ -52,5 +52,11 @@ prefixes (cc, mk, na) to avoid clashes.
 TODO: Figure out how to hash incrementally to use with standard hash package.
 
 TODO: More testing!
+
+Note: An earlier version was more literal and lots of functions passed a len
+parameter after every slice passed.
+
+Note: I'm sure others have already converted farmhash to Go but I'm improving
+my Go skills and wanted the experience.
 */
 package farmhash

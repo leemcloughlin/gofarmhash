@@ -1,5 +1,8 @@
 package farmhash
 
+// farmhash.go is the Public interface to farmhash.
+// There are some additional functions in farmhousecc.go
+
 const (
 	Version = "1.1"
 )

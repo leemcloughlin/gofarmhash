@@ -1,6 +1,7 @@
 package farmhash
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -25,8 +26,7 @@ type NumIn2Out struct {
 	out uint32
 }
 
-func Test000(t *testing.T) {
-	t.Log("rotate32")
+func TestRotate32(t *testing.T) {
 	rots := []NumIn2Out{
 		{0, 0, 0},
 		// Rotate32
@@ -265,8 +265,7 @@ func Test000(t *testing.T) {
 	}
 }
 
-func Test001(t *testing.T) {
-	t.Log("mur")
+func TestMux(t *testing.T) {
 	murs := []NumIn2Out{
 		// Mur
 		{100, 100, 296331858},
@@ -329,8 +328,7 @@ func Test001(t *testing.T) {
 	}
 }
 
-func Test002(t *testing.T) {
-	t.Log("fmix")
+func TestFmix(t *testing.T) {
 	fmixInOut := []NumInOut{
 		{0, 0},
 		{100, 4258159850},
@@ -351,8 +349,7 @@ func Test002(t *testing.T) {
 	}
 }
 
-func Test003(t *testing.T) {
-	t.Log("Hash32Len0to4")
+func TestHash32Len0to4(t *testing.T) {
 	strToHash32 := []StrToHash32{
 		// Hash32
 		{"hi", 4063302914},
@@ -371,8 +368,7 @@ func Test003(t *testing.T) {
 	}
 }
 
-func Test004(t *testing.T) {
-	t.Log("Hash32")
+func TestHash32(t *testing.T) {
 	strToHash32 := []StrToHash32{
 		// Hash32
 		// Hash32
@@ -395,8 +391,7 @@ func Test004(t *testing.T) {
 	}
 }
 
-func Test005(t *testing.T) {
-	t.Log("Hash64")
+func TestHash64(t *testing.T) {
 	strToHash64 := []StrToHash64{
 		// Hash64
 		{"", 0x9ae16a3b2f90404f},
@@ -416,4 +411,12 @@ func Test005(t *testing.T) {
 			t.Logf("OK expected %x got %x", s.expected, hash)
 		}
 	}
+}
+
+// Testing my doc example code!
+func TestExample(t *testing.T) {
+	str := "hello world"
+	bytes := []byte(str)
+	hash := Hash32(bytes)
+	fmt.Printf("Hash32(%s) is %x\n", str, hash)
 }
