@@ -4,7 +4,7 @@ package farmhash
 // There are some additional functions in farmhousecc.go
 
 const (
-	Version = "1.1"
+	Version = "1.0.0"
 )
 
 // These functions based on original C++ namespace util
