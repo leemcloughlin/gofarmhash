@@ -4,7 +4,8 @@ package farmhash
 // Some only differ by taking a seed but others are quite different
 // To avoid clashes I've added mk to the start of these names
 
-func mkHash32Len13to24(s []byte, len uint64, seed uint32) uint32 {
+func mkHash32Len13to24(s []byte, seed uint32) uint32 {
+	len := uint64(len(s))
 	a := fetch32(s[(len>>1)-4:])
 	b := fetch32(s[4:])
 	c := fetch32(s[len-8:])
@@ -21,7 +22,8 @@ func mkHash32Len13to24(s []byte, len uint64, seed uint32) uint32 {
 	return fmix(h)
 }
 
-func mkHash32Len0to4(s []byte, len uint64, seed uint32) uint32 {
+func mkHash32Len0to4(s []byte, seed uint32) uint32 {
+	len := uint64(len(s))
 	b := seed
 	var c uint32 = 9
 	var i uint64
@@ -33,7 +35,8 @@ func mkHash32Len0to4(s []byte, len uint64, seed uint32) uint32 {
 	return fmix(mur(b, mur(uint32(len), c)))
 }
 
-func mkHash32Len5to12(s []byte, len uint64, seed uint32) uint32 {
+func mkHash32Len5to12(s []byte, seed uint32) uint32 {
+	len := uint64(len(s))
 	var a, b, c, d uint32
 	a = uint32(len)
 	b = uint32(len) * 5
@@ -45,15 +48,16 @@ func mkHash32Len5to12(s []byte, len uint64, seed uint32) uint32 {
 	return fmix(seed ^ mur(c, mur(b, mur(a, d))))
 }
 
-func mkHash32(s []byte, len uint64) uint32 {
+func mkHash32(s []byte) uint32 {
+	len := uint64(len(s))
 	if len <= 24 {
 		if len <= 12 {
 			if len <= 4 {
-				return mkHash32Len0to4(s, len, 0)
+				return mkHash32Len0to4(s, 0)
 			}
-			return mkHash32Len5to12(s, len, 0)
+			return mkHash32Len5to12(s, 0)
 		}
-		return mkHash32Len13to24(s, len, 0)
+		return mkHash32Len13to24(s, 0)
 	}
 
 	// len > 24
@@ -114,16 +118,17 @@ func mkHash32(s []byte, len uint64) uint32 {
 	return h
 }
 
-func mkHash32WithSeed(s []byte, len uint64, seed uint32) uint32 {
+func mkHash32WithSeed(s []byte, seed uint32) uint32 {
+	len := uint64(len(s))
 	if len <= 24 {
 		if len >= 13 {
-			return mkHash32Len13to24(s, len, seed*c1)
+			return mkHash32Len13to24(s, seed*c1)
 		} else if len >= 5 {
-			return mkHash32Len5to12(s, len, seed)
+			return mkHash32Len5to12(s, seed)
 		} else {
-			return mkHash32Len0to4(s, len, seed)
+			return mkHash32Len0to4(s, seed)
 		}
 	}
-	h := mkHash32Len13to24(s, 24, seed^uint32(len))
-	return mur(hash32(s[24:], len-24)+seed, h)
+	h := mkHash32Len13to24(s[0:24], seed^uint32(len))
+	return mur(hash32(s[24:])+seed, h)
 }

@@ -362,7 +362,7 @@ func Test003(t *testing.T) {
 		if len(s.str) > 4 {
 			continue
 		}
-		hash := Hash32([]byte(s.str), uint64(len(s.str)))
+		hash := Hash32([]byte(s.str))
 		if hash != s.expected {
 			t.Errorf("failed expected %d got %d", s.expected, hash)
 		} else {
@@ -386,7 +386,7 @@ func Test004(t *testing.T) {
 		{"Go is a tool for managing Go source code.Usage:	go command [arguments]The commands are:    build       compile packages and dependencies    clean       remove object files    env         print Go environment information    fix         run go tool fix on packages    fmt         run gofmt on package sources    generate    generate Go files by processing source    get         download and install packages and dependencies    install     compile and install packages and dependencies    list        list packages    run         compile and run Go program    test        test packages    tool        run specified go tool    version     print Go version    vet         run go tool vet on packagesUse go help [command] for more information about a command.Additional help topics:    c           calling between Go and C    filetype    file types    gopath      GOPATH environment variable    importpath  import path syntax    packages    description of package lists    testflag    description of testing flags    testfunc    description of testing functionsUse go help [topic] for more information about that topic.", 0x9c8f96f3},
 	}
 	for _, s := range strToHash32 {
-		hash := Hash32([]byte(s.str), uint64(len(s.str)))
+		hash := Hash32([]byte(s.str))
 		if hash != s.expected {
 			t.Errorf("failed expected %x got %x", s.expected, hash)
 		} else {
@@ -409,7 +409,7 @@ func Test005(t *testing.T) {
 		{"Go is a tool for managing Go source code.Usage:	go command [arguments]The commands are:    build       compile packages and dependencies    clean       remove object files    env         print Go environment information    fix         run go tool fix on packages    fmt         run gofmt on package sources    generate    generate Go files by processing source    get         download and install packages and dependencies    install     compile and install packages and dependencies    list        list packages    run         compile and run Go program    test        test packages    tool        run specified go tool    version     print Go version    vet         run go tool vet on packagesUse go help [command] for more information about a command.Additional help topics:    c           calling between Go and C    filetype    file types    gopath      GOPATH environment variable    importpath  import path syntax    packages    description of package lists    testflag    description of testing flags    testfunc    description of testing functionsUse go help [topic] for more information about that topic.", 0xafe256550e4567c9},
 	}
 	for _, s := range strToHash64 {
-		hash := Hash64([]byte(s.str), uint64(len(s.str)))
+		hash := Hash64([]byte(s.str))
 		if hash != s.expected {
 			t.Errorf("failed expected %x got %x", s.expected, hash)
 		} else {

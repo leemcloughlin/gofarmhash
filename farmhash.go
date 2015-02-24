@@ -6,38 +6,38 @@ const (
 
 // These functions based on original C++ namespace util
 
-func Hash32(s []byte, len uint64) uint32 {
-	return mkHash32(s, len)
+func Hash32(s []byte) uint32 {
+	return mkHash32(s)
 }
 
-func Hash32WithSeed(s []byte, len uint64, seed uint32) uint32 {
-	return mkHash32WithSeed(s, len, seed)
+func Hash32WithSeed(s []byte, seed uint32) uint32 {
+	return mkHash32WithSeed(s, seed)
 }
 
-func Hash64(s []byte, len uint64) uint64 {
-	return naHash64(s, len)
+func Hash64(s []byte) uint64 {
+	return naHash64(s)
 }
 
-func Hash64WithSeed(s []byte, len, seed uint64) uint64 {
-	return naHash64WithSeed(s, len, seed)
+func Hash64WithSeed(s []byte, seed uint64) uint64 {
+	return naHash64WithSeed(s, seed)
 }
 
-func Hash64WithSeeds(s []byte, len, seed0, seed1 uint64) uint64 {
-	return naHash64WithSeeds(s, len, seed0, seed1)
+func Hash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
+	return naHash64WithSeeds(s, seed0, seed1)
 }
 
-func Hash128(s []byte, len uint64) Uint128 {
-	return Fingerprint128(s, len)
+func Hash128(s []byte) Uint128 {
+	return Fingerprint128(s)
 }
 
-func Hash128WithSeed(s []byte, len uint64, seed Uint128) Uint128 {
-	return CityHash128WithSeed(s, len, seed)
+func Hash128WithSeed(s []byte, seed Uint128) Uint128 {
+	return CityHash128WithSeed(s, seed)
 }
 
-func FingerPrint32(s []byte, len uint64) uint32 {
-	return mkHash32(s, len)
+func FingerPrint32(s []byte) uint32 {
+	return mkHash32(s)
 }
 
-func FingerPrint64(s []byte, len uint64) uint64 {
-	return naHash64(s, len)
+func FingerPrint64(s []byte) uint64 {
+	return naHash64(s)
 }

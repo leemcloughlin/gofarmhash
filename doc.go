@@ -51,9 +51,6 @@ prefixes (cc, mk, na) to avoid clashes.
 
 TODO: Figure out how to hash incrementally to use with standard hash package.
 
-TODO: Drop the len parameter and use the size of the []byte slices will take
-up the slack.
-
 TODO: More testing!
 */
 package farmhash

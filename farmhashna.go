@@ -19,7 +19,8 @@ func hashLen16Mul(u, v, mul uint64) uint64 {
 	return b
 }
 
-func hashLen0to16(s []byte, len uint64) uint64 {
+func hashLen0to16(s []byte) uint64 {
+	len := uint64(len(s))
 	if len >= 8 {
 		mul := k2 + len*2
 		a := fetch64(s) + k2
@@ -46,7 +47,8 @@ func hashLen0to16(s []byte, len uint64) uint64 {
 
 // This probably works well for 16-byte strings as well, but it may be overkill
 // in that case.
-func hashLen17to32(s []byte, len uint64) uint64 {
+func hashLen17to32(s []byte) uint64 {
+	len := uint64(len(s))
 	mul := k2 + len*2
 	a := fetch64(s) * k1
 	b := fetch64(s[8:])
@@ -85,7 +87,8 @@ func weakHashLen32WithSeedsBytes(s []byte, a, b uint64) uint128 {
 */
 
 // Return an 8-byte hash for 33 to 64 bytes.
-func hashLen33to64(s []byte, len uint64) uint64 {
+func hashLen33to64(s []byte) uint64 {
+	len := uint64(len(s))
 	mul := k2 + len*2
 	a := fetch64(s) * k2
 	b := fetch64(s[8:])
@@ -102,16 +105,17 @@ func hashLen33to64(s []byte, len uint64) uint64 {
 }
 
 // renamed from hash64 to make it clearer elsewhere which is being called
-func naHash64(s []byte, len uint64) uint64 {
+func naHash64(s []byte) uint64 {
+	len := uint64(len(s))
 	const seed uint64 = 81
 	if len <= 32 {
 		if len <= 16 {
-			return hashLen0to16(s, len)
+			return hashLen0to16(s)
 		} else {
-			return hashLen17to32(s, len)
+			return hashLen17to32(s)
 		}
 	} else if len <= 64 {
-		return hashLen33to64(s, len)
+		return hashLen33to64(s)
 	}
 
 	// For strings over 64 bytes we loop.  Internal state consists of
@@ -166,10 +170,10 @@ func naHash64(s []byte, len uint64) uint64 {
 		mul)
 }
 
-func naHash64WithSeed(s []byte, len uint64, seed uint64) uint64 {
-	return naHash64WithSeeds(s, len, k2, seed)
+func naHash64WithSeed(s []byte, seed uint64) uint64 {
+	return naHash64WithSeeds(s, k2, seed)
 }
 
-func naHash64WithSeeds(s []byte, len, seed0, seed1 uint64) uint64 {
-	return hashLen16(naHash64(s, len)-seed0, seed1)
+func naHash64WithSeeds(s []byte, seed0, seed1 uint64) uint64 {
+	return hashLen16(naHash64(s)-seed0, seed1)
 }
