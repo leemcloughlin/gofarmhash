@@ -137,7 +137,7 @@ func hash32WithSeed(s []byte, len uint64, seed uint32) uint32 {
 // Note: use identical ShiftMix from farmhashna.go
 
 func hashLen16NoMul(u, v uint64) uint64 {
-	return hash128to64(uint128{u, v})
+	return hash128to64(Uint128{u, v})
 }
 
 // Note: avoid clashing with the same names in farmhashna by adding cc to start
@@ -180,19 +180,19 @@ func ccHashLen0to16(s []byte, len uint64) uint64 {
 // Return a 16-byte hash for 48 bytes.  Quick and dirty.
 // Callers do best to use "random-looking" values for a and b.
 // Note: original C++ returned a pair<uint64_t, uint64_t>
-func weakHashLen32WithSeeds(w, x, y, z, a, b uint64) uint128 {
+func weakHashLen32WithSeeds(w, x, y, z, a, b uint64) Uint128 {
 	a += w
 	b = rotate64(b+a+z, 21)
 	c := a
 	a += x
 	a += y
 	b += rotate64(a, 44)
-	return uint128{a + z, b + c}
+	return Uint128{a + z, b + c}
 }
 
 // Return a 16-byte hash for s[0] ... s[31], a, and b.  Quick and dirty.
 // Note: original C++ returned a pair<uint64_t, uint64_t>
-func weakHashLen32WithSeedsBytes(s []byte, a, b uint64) uint128 {
+func weakHashLen32WithSeedsBytes(s []byte, a, b uint64) Uint128 {
 	return weakHashLen32WithSeeds(fetch64(s),
 		fetch64(s[8:]),
 		fetch64(s[16:]),
@@ -203,9 +203,9 @@ func weakHashLen32WithSeedsBytes(s []byte, a, b uint64) uint128 {
 
 // A subroutine for CityHash128().  Returns a decent 128-bit hash for strings
 // of any length representable in signed long.  Based on City and Murmur.
-func CityMurmur(s []byte, len uint64, seed uint128) uint128 {
-	a := seed.first
-	b := seed.second
+func CityMurmur(s []byte, len uint64, seed Uint128) Uint128 {
+	a := seed.First
+	b := seed.Second
 	var c uint64 = 0
 	var d uint64 = 0
 	l := int64(len - 16)
@@ -237,10 +237,10 @@ func CityMurmur(s []byte, len uint64, seed uint128) uint128 {
 	}
 	a = hashLen16NoMul(a, c)
 	b = hashLen16NoMul(d, b)
-	return uint128{a ^ b, hashLen16NoMul(b, a)}
+	return Uint128{a ^ b, hashLen16NoMul(b, a)}
 }
 
-func CityHash128WithSeed(s []byte, len uint64, seed uint128) uint128 {
+func CityHash128WithSeed(s []byte, len uint64, seed Uint128) Uint128 {
 	if len < 128 {
 		return CityMurmur(s, len, seed)
 	}
@@ -248,33 +248,33 @@ func CityHash128WithSeed(s []byte, len uint64, seed uint128) uint128 {
 	// We expect len >= 128 to be the common case.  Keep 56 bytes of state:
 	// v, w, x, y, and z.
 	// Note: v and w were pair<uint64_t, uint64_t> in the C++
-	var v, w uint128
-	x := seed.first
-	y := seed.second
+	var v, w Uint128
+	x := seed.First
+	y := seed.Second
 	z := len * k1
-	v.first = rotate64(y^k1, 49)*k1 + fetch64(s)
-	v.second = rotate64(v.first, 42)*k1 + fetch64(s[8:])
-	w.first = rotate64(y+z, 35)*k1 + x
-	w.second = rotate64(x+fetch64(s[88:]), 53) * k1
+	v.First = rotate64(y^k1, 49)*k1 + fetch64(s)
+	v.Second = rotate64(v.First, 42)*k1 + fetch64(s[8:])
+	w.First = rotate64(y+z, 35)*k1 + x
+	w.Second = rotate64(x+fetch64(s[88:]), 53) * k1
 
 	// This is the same inner loop as CityHash64(), manually unrolled.
 	for {
-		x = rotate64(x+y+v.first+fetch64(s[8:]), 37) * k1
-		y = rotate64(y+v.second+fetch64(s[48:]), 42) * k1
-		x ^= w.second
-		y += v.first + fetch64(s[40:])
-		z = rotate64(z+w.first, 33) * k1
-		v = weakHashLen32WithSeedsBytes(s, v.second*k1, x+w.first)
-		w = weakHashLen32WithSeedsBytes(s[32:], z+w.second, y+fetch64(s[16:]))
+		x = rotate64(x+y+v.First+fetch64(s[8:]), 37) * k1
+		y = rotate64(y+v.Second+fetch64(s[48:]), 42) * k1
+		x ^= w.Second
+		y += v.First + fetch64(s[40:])
+		z = rotate64(z+w.First, 33) * k1
+		v = weakHashLen32WithSeedsBytes(s, v.Second*k1, x+w.First)
+		w = weakHashLen32WithSeedsBytes(s[32:], z+w.Second, y+fetch64(s[16:]))
 		z, x = x, y
 		s = s[64:]
-		x = rotate64(x+y+v.first+fetch64(s[8:]), 37) * k1
-		y = rotate64(y+v.second+fetch64(s[48:]), 42) * k1
-		x ^= w.second
-		y += v.first + fetch64(s[40:])
-		z = rotate64(z+w.first, 33) * k1
-		v = weakHashLen32WithSeedsBytes(s, v.second*k1, x+w.first)
-		w = weakHashLen32WithSeedsBytes(s[32:], z+w.second, y+fetch64(s[16:]))
+		x = rotate64(x+y+v.First+fetch64(s[8:]), 37) * k1
+		y = rotate64(y+v.Second+fetch64(s[48:]), 42) * k1
+		x ^= w.Second
+		y += v.First + fetch64(s[40:])
+		z = rotate64(z+w.First, 33) * k1
+		v = weakHashLen32WithSeedsBytes(s, v.Second*k1, x+w.First)
+		w = weakHashLen32WithSeedsBytes(s[32:], z+w.Second, y+fetch64(s[16:]))
 		z, x = x, y
 		s = s[64:]
 		len -= 128
@@ -282,41 +282,41 @@ func CityHash128WithSeed(s []byte, len uint64, seed uint128) uint128 {
 			break
 		}
 	}
-	x += rotate64(v.first+z, 49) * k0
-	y = y*k0 + rotate64(w.second, 37)
-	z = z*k0 + rotate64(w.first, 27)
-	w.first *= 9
-	v.first *= k0
+	x += rotate64(v.First+z, 49) * k0
+	y = y*k0 + rotate64(w.Second, 37)
+	z = z*k0 + rotate64(w.First, 27)
+	w.First *= 9
+	v.First *= k0
 	// If 0 < len < 128, hash up to 4 chunks of 32 bytes each from the end of s.
 	var tail_done uint64
 	for tail_done = 0; tail_done < len; {
 		tail_done += 32
-		y = rotate64(x+y, 42)*k0 + v.second
-		w.first += fetch64(s[len-tail_done+16:])
-		x = x*k0 + w.first
-		z += w.second + fetch64(s[len-tail_done:])
-		w.second += v.first
-		v = weakHashLen32WithSeedsBytes(s[len-tail_done:], v.first+z, v.second)
-		v.first *= k0
+		y = rotate64(x+y, 42)*k0 + v.Second
+		w.First += fetch64(s[len-tail_done+16:])
+		x = x*k0 + w.First
+		z += w.Second + fetch64(s[len-tail_done:])
+		w.Second += v.First
+		v = weakHashLen32WithSeedsBytes(s[len-tail_done:], v.First+z, v.Second)
+		v.First *= k0
 	}
 	// At this point our 56 bytes of state should contain more than
 	// enough information for a strong 128-bit hash.  We use two
 	// different 56-byte-to-8-byte hashes to get a 16-byte final result.
-	x = hashLen16NoMul(x, v.first)
-	y = hashLen16NoMul(y+z, w.first)
-	return uint128{hashLen16NoMul(x+v.second, w.second) + y,
-		hashLen16NoMul(x+w.second, y+v.second)}
+	x = hashLen16NoMul(x, v.First)
+	y = hashLen16NoMul(y+z, w.First)
+	return Uint128{hashLen16NoMul(x+v.Second, w.Second) + y,
+		hashLen16NoMul(x+w.Second, y+v.Second)}
 }
 
-func CityHash128(s []byte, len uint64) uint128 {
+func CityHash128(s []byte, len uint64) Uint128 {
 	if len >= 16 {
 		return CityHash128WithSeed(s[16:], len-16,
-			uint128{fetch64(s), fetch64(s[8:]) + k0})
+			Uint128{fetch64(s), fetch64(s[8:]) + k0})
 
 	}
-	return CityHash128WithSeed(s, len, uint128{k0, k1})
+	return CityHash128WithSeed(s, len, Uint128{k0, k1})
 }
 
-func Fingerprint128(s []byte, len uint64) uint128 {
+func Fingerprint128(s []byte, len uint64) Uint128 {
 	return CityHash128(s, len)
 }

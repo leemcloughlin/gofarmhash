@@ -5,7 +5,7 @@ func shiftMix(val uint64) uint64 {
 }
 
 func hashLen16(u, v uint64) uint64 {
-	return hash128to64(uint128{u, v})
+	return hash128to64(Uint128{u, v})
 }
 
 // Note: the C++ original was overloaded hashLen16()
@@ -124,7 +124,7 @@ func naHash64(s []byte, len uint64) uint64 {
 	y += 113
 	z := shiftMix(y*k2+113) * k2
 	// v and w were pair<uint64_t, uint64_t>
-	var v, w uint128
+	var v, w Uint128
 	x = x*k2 + fetch64(s)
 
 	// Set end so that after the loop we have 1 to 64 bytes left to process.
@@ -133,13 +133,13 @@ func naHash64(s []byte, len uint64) uint64 {
 	var i uint64
 	origS := s[:]
 	for {
-		x = rotate64(x+y+v.first+fetch64(s[8:]), 37) * k1
-		y = rotate64(y+v.second+fetch64(s[48:]), 42) * k1
-		x ^= w.second
-		y += v.first + fetch64(s[40:])
-		z = rotate64(z+w.first, 33) * k1
-		v = weakHashLen32WithSeedsBytes(s, v.second*k1, x+w.first)
-		w = weakHashLen32WithSeedsBytes(s[32:], z+w.second, y+fetch64(s[16:]))
+		x = rotate64(x+y+v.First+fetch64(s[8:]), 37) * k1
+		y = rotate64(y+v.Second+fetch64(s[48:]), 42) * k1
+		x ^= w.Second
+		y += v.First + fetch64(s[40:])
+		z = rotate64(z+w.First, 33) * k1
+		v = weakHashLen32WithSeedsBytes(s, v.Second*k1, x+w.First)
+		w = weakHashLen32WithSeedsBytes(s[32:], z+w.Second, y+fetch64(s[16:]))
 		z, x = x, z
 		s = s[64:]
 		i += 64
@@ -150,19 +150,19 @@ func naHash64(s []byte, len uint64) uint64 {
 	mul := k1 + ((z & 0xff) << 1)
 	// Make s point to the last 64 bytes of input.
 	s = origS[last64:]
-	w.first += ((len - 1) & 63)
-	v.first += w.first
-	w.first += v.first
-	x = rotate64(x+y+v.first+fetch64(s[8:]), 37) * mul
-	y = rotate64(y+v.second+fetch64(s[48:]), 42) * mul
-	x ^= w.second * 9
-	y += v.first*9 + fetch64(s[40:])
-	z = rotate64(z+w.first, 33) * mul
-	v = weakHashLen32WithSeedsBytes(s, v.second*mul, x+w.first)
-	w = weakHashLen32WithSeedsBytes(s[32:], z+w.second, y+fetch64(s[16:]))
+	w.First += ((len - 1) & 63)
+	v.First += w.First
+	w.First += v.First
+	x = rotate64(x+y+v.First+fetch64(s[8:]), 37) * mul
+	y = rotate64(y+v.Second+fetch64(s[48:]), 42) * mul
+	x ^= w.Second * 9
+	y += v.First*9 + fetch64(s[40:])
+	z = rotate64(z+w.First, 33) * mul
+	v = weakHashLen32WithSeedsBytes(s, v.Second*mul, x+w.First)
+	w = weakHashLen32WithSeedsBytes(s[32:], z+w.Second, y+fetch64(s[16:]))
 	z, x = x, z
-	return hashLen16Mul(hashLen16Mul(v.first, w.first, mul)+shiftMix(y)*k0+z,
-		hashLen16Mul(v.second, w.second, mul)+x,
+	return hashLen16Mul(hashLen16Mul(v.First, w.First, mul)+shiftMix(y)*k0+z,
+		hashLen16Mul(v.Second, w.Second, mul)+x,
 		mul)
 }
 

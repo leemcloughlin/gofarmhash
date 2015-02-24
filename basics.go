@@ -38,17 +38,17 @@ func bswap32(x uint32) uint32 {
 	return ((x >> 24) & 0xFF) | ((x >> 8) & 0xFF00) | ((x << 8) & 0xFF0000) | ((x << 24) & 0xFF000000)
 }
 
-type uint128 struct {
-	first, second uint64
+type Uint128 struct {
+	First, Second uint64
 }
 
 // hash128to64 is from farmhash.h it is intended to be a reasonably good hash function.
-func hash128to64(x uint128) uint64 {
+func hash128to64(x Uint128) uint64 {
 	// Murmur-inspired hashing.
 	const kMul uint64 = 0x9ddfea08eb382d69
-	a := (x.first ^ x.second) * kMul
+	a := (x.First ^ x.Second) * kMul
 	a ^= (a >> 47)
-	b := (x.second ^ a) * kMul
+	b := (x.Second ^ a) * kMul
 	b ^= (b >> 47)
 	b *= kMul
 	return b

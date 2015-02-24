@@ -1,25 +1,8 @@
-// farmhash Googles hash algorithm
-
-/*
-Farmash is a successor to Cityhash
-
-This code is just a conversion of Googles C++ into go and moved around a bit
-to implement the hash interface
-*/
 package farmhash
 
 const (
 	Version = "1.1"
 )
-
-type Farmhash32 struct {
-}
-
-type Farmhash64 struct {
-}
-
-func (f *Farmhash32) Reset() {
-}
 
 // These functions based on original C++ namespace util
 
@@ -43,11 +26,11 @@ func Hash64WithSeeds(s []byte, len, seed0, seed1 uint64) uint64 {
 	return naHash64WithSeeds(s, len, seed0, seed1)
 }
 
-func Hash128(s []byte, len uint64) uint128 {
+func Hash128(s []byte, len uint64) Uint128 {
 	return Fingerprint128(s, len)
 }
 
-func Hash128WithSeed(s []byte, len uint64, seed uint128) uint128 {
+func Hash128WithSeed(s []byte, len uint64, seed Uint128) Uint128 {
 	return CityHash128WithSeed(s, len, seed)
 }
 
@@ -58,9 +41,3 @@ func FingerPrint32(s []byte, len uint64) uint32 {
 func FingerPrint64(s []byte, len uint64) uint64 {
 	return naHash64(s, len)
 }
-
-/*
-uint128_t Fingerprint128(const char* s, size_t len) {
-  return farmhashcc::Fingerprint128(s, len);
-}
-*/

@@ -1,21 +1,59 @@
-// farmhash project doc.go
+// farmhash Google hash algorithm
 
 /*
-farmhash document
+Farmhash is a successor to Cityhash (both from Google)
+
+Original Copyright
+
+Copyright (c) 2014 Google, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+FarmHash, by Geoff Pike
+
+Conversion Notes
+
+Converted by Lee McLoughlin, LMMRTech
 
 Converted from the original C++ source code by building it (on a Ubuntu
-based system with an Intel CPU). Then copying the build command and using it to
+based system with an Intel CPU). Then copying the build command and editing it to
 generate the output of the cpp stage. This showed a version of what code was
-required. Note that I copied code from the original files to convert to Go
+required. I then copied code from the original files to convert to Go
 in order to preserve original comments.
 
-NOTE: When building its important to build with -DFARMHASH_DEBUG=0
-(or edit src/farmhash.cc and add a #define) otherwise the results are byteswapped!
+Note: when building the C++ its important to build with -DFARMHASH_DEBUG=0
+(or edit src/farmhash.cc and add a #define) otherwise the results are byteswapped
+for reasons I don't understand.
 
-Pointer arithmatic in the C++ was mostly simple offsets so instead slices were
-sliced to the same offset.
+To test I wrote a small program in C++ to generate both hashes and results from
+internal routines to add to the test routines here in the Go version.
 
-To obey Go export rules some functions had their first character case changed
+To obey Go export rules some functions had their first character case changed.
 
+TODO: Sort out all Public vs private names & rationalise my use of
+prefixes (cc, mk, na) to avoid clashes.
+
+TODO: Figure out how to hash incrementally to use with standard hash package.
+
+TODO: Drop the len parameter and use the size of the []byte slices will take
+up the slack.
+
+TODO: More testing!
 */
 package farmhash
