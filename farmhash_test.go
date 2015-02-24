@@ -5,6 +5,9 @@ package farmhash
 
 import (
 	"fmt"
+	"hash/adler32"
+	"hash/crc32"
+	"hash/fnv"
 	"testing"
 )
 
@@ -422,4 +425,54 @@ func TestExample(t *testing.T) {
 	bytes := []byte(str)
 	hash := Hash32(bytes)
 	fmt.Printf("Hash32(%s) is %x\n", str, hash)
+}
+
+func BenchmarkHash32(b *testing.B) {
+	str := "docklandsman@gmail.com"
+	bytes := []byte(str)
+	for i := 0; i < b.N; i++ {
+		_ = Hash32(bytes)
+	}
+}
+
+// FNV1 is run just to compare against farmhash
+func BenchmarkFNV1(b *testing.B) {
+	str := "docklandsman@gmail.com"
+	bytes := []byte(str)
+	h := fnv.New32()
+	for i := 0; i < b.N; i++ {
+		h.Reset()
+		h.Write(bytes)
+		_ = h.Sum([]byte{})
+	}
+}
+
+// FNV1a is run just to compare against farmhash
+func BenchmarkFNV1a(b *testing.B) {
+	str := "docklandsman@gmail.com"
+	bytes := []byte(str)
+	h := fnv.New32a()
+	for i := 0; i < b.N; i++ {
+		h.Reset()
+		h.Write(bytes)
+		_ = h.Sum([]byte{})
+	}
+}
+
+// Adler32 is run just to compare against farmhash
+func BenchmarkAdler32(b *testing.B) {
+	str := "docklandsman@gmail.com"
+	bytes := []byte(str)
+	for i := 0; i < b.N; i++ {
+		_ = adler32.Checksum(bytes)
+	}
+}
+
+// Crc32 (IEEE) is run just to compare against farmhash
+func BenchmarkCrc32(b *testing.B) {
+	str := "docklandsman@gmail.com"
+	bytes := []byte(str)
+	for i := 0; i < b.N; i++ {
+		_ = crc32.ChecksumIEEE(bytes)
+	}
 }

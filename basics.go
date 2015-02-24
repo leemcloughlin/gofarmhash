@@ -1,6 +1,6 @@
 package farmhash
 
-// based on basics.cc
+// Based on the original C++ basics.cc
 
 const (
 	// Some primes between 2^63 and 2^64 for various uses.
