@@ -4,6 +4,7 @@ package farmhash
 // Test both the Public and internal func's
 
 import (
+	"crypto/sha1"
 	"fmt"
 	"hash/adler32"
 	"hash/crc32"
@@ -474,5 +475,17 @@ func BenchmarkCrc32(b *testing.B) {
 	bytes := []byte(str)
 	for i := 0; i < b.N; i++ {
 		_ = crc32.ChecksumIEEE(bytes)
+	}
+}
+
+// SHA1 is run just to compare against farmhash
+func BenchmarkSHA1(b *testing.B) {
+	str := "docklandsman@gmail.com"
+	bytes := []byte(str)
+	h := sha1.New()
+	for i := 0; i < b.N; i++ {
+		h.Reset()
+		h.Write(bytes)
+		_ = h.Sum([]byte{})
 	}
 }

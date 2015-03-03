@@ -37,7 +37,8 @@ generate the output of the C pre-processor stage. This showed a version of what 
 required. I then copied code from the original files to convert to Go
 in order to preserve original comments.
 
-Note: when building the C++ its important to build with -DFARMHASH_DEBUG=0
+Note: If you want to compare results between this Go library and the original then
+when building the C++ its important to build with -DFARMHASH_DEBUG=0
 (or edit src/farmhash.cc and add a #define) otherwise the results are byte swapped
 for reasons I don't understand. Of course a byte swapped hash is still a hash.
 
