@@ -11,7 +11,7 @@ before it, use ideas from Austin Appleby's MurmurHash.
 To install run:
 
 <code>
-go get code.google.com/p/gofarmhash
+go get github.com/leemcloughlin/gofarmhash
 </code>
 
 <h2>Documentation </h2>
