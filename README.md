@@ -14,8 +14,12 @@ To install run:
 go get github.com/leemcloughlin/gofarmhash
 </code>
 
-<h2>Documentation </h2>
+<h2>Documentation</h2>
 
 For documentation including examples please see:
 
 http://godoc.org/github.com/leemcloughlin/gofarmhash
+
+<h2>License</h2>
+As this is just a fairly literal port of Google's code consider this 
+under the same license (MIT license). For details see COPYING
